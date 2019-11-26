@@ -179,6 +179,12 @@ const UIController = (function() {
 
     };
 
+    let nodeListForEach = function(list, callback) {
+        for (let i = 0; i < list.length; i++) {
+            callback(list[i], i);
+        }
+    };
+
     
     return {
         getinput: function() {
@@ -260,11 +266,6 @@ const UIController = (function() {
 
             let fields = document.querySelectorAll(DOMstrings.expensesPercLabel);
 
-            let nodeListForEach = function(list, callback) {
-                for (let i = 0; i < list.length; i++) {
-                    callback(list[i], i);
-                }
-            }
 
             nodeListForEach(fields, function(current, index) {
 
@@ -291,6 +292,19 @@ const UIController = (function() {
 
         },
 
+        changedType: function() {
+
+            let fields = document.querySelectorAll(
+                DOMstrings.inputType + ',' +
+                DOMstrings.inputDescription + ',' +
+                DOMstrings.inputValue
+            );
+
+            nodeListForEach(fields, function(cur){
+                cur.classList.toggle('red-focus');
+            });
+
+        },
 
         getDOMstrings: function() {
             return DOMstrings;
@@ -302,8 +316,6 @@ const UIController = (function() {
 // Global APP Controller
 
 const controller = (function(budgetCtrl, UICtrl) {
-
-    
 
     const setupEventListeners = function() {
 
@@ -319,6 +331,8 @@ const controller = (function(budgetCtrl, UICtrl) {
         });
 
         document.querySelector(DOM.container).addEventListener('click', ctrlDeleteItem);
+
+        document.querySelector(DOM.inputType).addEventListener('change', UICtrl.changedType);
     };
 
 
